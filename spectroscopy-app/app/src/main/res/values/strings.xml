@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">spectroscopy-app</string>
+    <string name="connect">connect</string>
+    <string name="connect_to_esp8266">connect to esp8266</string>
 </resources>
