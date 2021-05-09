@@ -12,6 +12,7 @@ WiFiServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
 boolean spectrometerLightMeasurement = false; // Setting a toggle for spectroscopy light measurements
+boolean spectrometerCheck = false; // Spectrometer flag to only run once to stop status LED flashing
 
 void setup() {
   Serial.begin(9600);
@@ -46,12 +47,17 @@ void loop() {
 }
 
 // Checks if the spectrometer is connected
-if(sensor.begin() == false) { 
-    Serial.println("Spectrometer sensor is not connected, please check connection and try again");
-    // Should print error to app
-    while(1);
-} else {
-  sensor.disableIndicator(); // Turn off the blue status LED to not interfere with readings
+void checkSpectrometer() {
+  if(!spectrometerCheck) { 
+    if(!sensor.begin()) {
+      Serial.println("Spectrometer sensor is not connected, please check connection and try again");
+      // Should print error to app
+      while(1);
+    } else {
+      sensor.disableIndicator(); // Turn off the blue status LED to not interfere with readings
+      spectrometerCheck = true;
+    }
+  }
 }
 
 // Checks if the app is connected to the IP address
@@ -60,7 +66,7 @@ void checkWIFI() {
   if(client) {
     String request = client.readStringUntil('\r'); // HTTP request
     client.flush(); // Waits until all of buffer have been sent
-    
+    Serial.println("Connected");
     // Checks if the suffix of the IP address
     if(request.indexOf(" /1 ") != -1) {
       spectrometerLightMeasurement = true;
