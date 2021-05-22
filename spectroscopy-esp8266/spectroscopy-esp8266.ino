@@ -1,13 +1,17 @@
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
+#include <Wire.h>
 #include "SparkFun_AS7265X.h" 
 AS7265X sensor;
 
-#include <Wire.h>
+// Setup JSON document
+StaticJsonDocument<500> doc;
+//DynamicJsonDocument doc(500);
 
 //const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
 //const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
 const char *ssid = "TP-Link_E66C"; // The name of the Wi-Fi network that will be created
-const char *password = "Anhsao123";   // The password required to connect to it, leave blank for an open network
+const char *password = "Anhsao123"; // The password required to connect to it, leave blank for an open network
 WiFiServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
@@ -16,8 +20,8 @@ boolean spectrometerCheck = false; // Spectrometer flag to only run once to stop
 
 void setup() {
   Serial.begin(9600);
-  
-  // Set up WIFI 
+
+  // Setup WIFI 
   WiFi.begin(ssid, password);
   // Makes sure the ESP8266 is connected to WIFI
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
@@ -67,6 +71,7 @@ void checkWIFI() {
     String request = client.readStringUntil('\r'); // HTTP request
     client.flush(); // Waits until all of buffer have been sent
     Serial.println("Connected");
+    Serial.println(request);
     // Checks if the suffix of the IP address
     if(request.indexOf(" /1 ") != -1) {
       spectrometerLightMeasurement = true;
@@ -75,6 +80,10 @@ void checkWIFI() {
     else if(request.indexOf(" /2 ") !=  -1) {
       spectrometerLightMeasurement = false;
       Serial.println("Light measurement off");
+    }
+    else if(request.indexOf(" /data ") !=  -1) {
+      transmitJSON();
+      Serial.println("Transmitting data");
     }
   }
 }
@@ -103,4 +112,39 @@ void getCalibrationData() {
   calibrationData[15] = sensor.getCalibratedU();
   calibrationData[16] = sensor.getCalibratedV();
   calibrationData[17] = sensor.getCalibratedW();
+
+  transmitJSON();
+}
+
+// Transmit JSON file
+void transmitJSON() {  
+  doc.clear(); // Clear JSON
+  
+  // Create JSON value and array
+  doc["type"] = "spectrometer sensor";
+  JsonArray data = doc.createNestedArray("data");
+  
+  // Add data to JSON array
+  data.add(calibrationData[0]);
+  data.add(calibrationData[1]);
+  data.add(calibrationData[2]);
+  data.add(calibrationData[3]);
+  data.add(calibrationData[4]);
+  data.add(calibrationData[5]);
+  
+  data.add(calibrationData[6]);
+  data.add(calibrationData[7]);
+  data.add(calibrationData[8]);
+  data.add(calibrationData[9]);
+  data.add(calibrationData[10]);
+  data.add(calibrationData[11]);
+  
+  data.add(calibrationData[12]);
+  data.add(calibrationData[13]);
+  data.add(calibrationData[14]);
+  data.add(calibrationData[15]);
+  data.add(calibrationData[16]);
+  data.add(calibrationData[17]);
+
+  // TODO: Transmit data
 }
