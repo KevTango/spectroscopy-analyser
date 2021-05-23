@@ -118,7 +118,7 @@ void getCalibrationData() {
 
 // Transmit JSON file
 void transmitJSON() {  
-  doc.clear(); // Clear JSON
+  doc.clear(); // Clear JSON document
   
   // Create JSON value and array
   doc["type"] = "spectrometer sensor";
@@ -146,5 +146,7 @@ void transmitJSON() {
   data.add(calibrationData[16]);
   data.add(calibrationData[17]);
 
-  // TODO: Transmit data
+  // Transmit data
+  WiFiClient client = server.available();
+  serializeJson(doc, client);
 }
