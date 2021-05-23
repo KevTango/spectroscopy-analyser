@@ -68,7 +68,7 @@ void checkSpectrometer() {
 void checkWIFI() {
   WiFiClient client = server.available();
   if(client) {
-    String request = client.readStringUntil('\r'); // HTTP request
+    String request = client.readStringUntil('\r'); // GET request
     client.flush(); // Waits until all of buffer have been sent
     Serial.println("Connected");
     Serial.println(request);
@@ -112,8 +112,6 @@ void getCalibrationData() {
   calibrationData[15] = sensor.getCalibratedU();
   calibrationData[16] = sensor.getCalibratedV();
   calibrationData[17] = sensor.getCalibratedW();
-
-  transmitJSON();
 }
 
 // Transmit JSON file
@@ -148,5 +146,13 @@ void transmitJSON() {
 
   // Transmit data
   WiFiClient client = server.available();
-  serializeJson(doc, client);
+  if(client) {
+    client.print("<!DOCTYPE HTML>\r\n");
+    client.print("<head>\r\n");
+    client.print("<link rel='shortcut icon' href='data:image/x-icon;,' type='image/x-icon'> \r\n"); // Shortcut icon to remove favicon.ico issue
+    client.print("</head>\r\n");
+    client.print("<html>\r\n");
+    serializeJson(doc, client);
+    client.print("</html>\r\n");
+  }
 }
