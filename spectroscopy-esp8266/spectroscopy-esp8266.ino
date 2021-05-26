@@ -1,4 +1,6 @@
 #include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <ESP8266mDNS.h>
 #include <ArduinoJson.h>
 #include <Wire.h>
 #include "SparkFun_AS7265X.h" 
@@ -12,11 +14,58 @@ StaticJsonDocument<500> doc;
 //const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
 const char *ssid = "TP-Link_E66C"; // The name of the Wi-Fi network that will be created
 const char *password = "Anhsao123"; // The password required to connect to it, leave blank for an open network
-WiFiServer server(80);
+ESP8266WebServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
 boolean spectrometerLightMeasurement = false; // Setting a toggle for spectroscopy light measurements
 boolean spectrometerCheck = false; // Spectrometer flag to only run once to stop status LED flashing
+
+void handleRoot() {
+  server.send(200, "text/plain", "Connected");
+  Serial.println("Connected");
+}
+
+void turnLEDOn() {
+  server.send(200, "text/plain", "LED turned on");
+  Serial.println("LED turned on");
+  spectrometerLightMeasurement = true;
+}
+
+void turnLEDOff() {
+  server.send(200, "text/plain", "LED turned off");
+  Serial.println("LED turned off");
+  spectrometerLightMeasurement = false;
+}
+
+void transmitJSON() {
+  doc.clear(); // Clear JSON document
+  
+  // Create JSON value and array
+  doc["type"] = "spectrometer sensor";
+  JsonArray data = doc.createNestedArray("data");
+  
+  // Add data to JSON array
+  data.add(calibrationData[0]);
+  data.add(calibrationData[1]);
+  data.add(calibrationData[2]);
+  data.add(calibrationData[3]);
+  data.add(calibrationData[4]);
+  data.add(calibrationData[5]);
+  
+  data.add(calibrationData[6]);
+  data.add(calibrationData[7]);
+  data.add(calibrationData[8]);
+  data.add(calibrationData[9]);
+  data.add(calibrationData[10]);
+  data.add(calibrationData[11]);
+  
+  data.add(calibrationData[12]);
+  data.add(calibrationData[13]);
+  data.add(calibrationData[14]);
+  data.add(calibrationData[15]);
+  data.add(calibrationData[16]);
+  data.add(calibrationData[17]);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -42,11 +91,20 @@ void setup() {
   Serial.println("WIFI connected");
   Serial.print("IP Address: "); 
   Serial.println(WiFi.localIP()); // Prints IP address
+
+  if (MDNS.begin("esp8266")) {
+    Serial.println("MDNS responder started");
+  }
+
+  server.on("/", handleRoot);
+  server.on("/1", turnLEDOn);
+  server.on("/2", turnLEDOff);
+  server.on("/data", transmitJSON);
 }
 
 void loop() {
+  server.handleClient();
   checkSpectrometer();
-  checkWIFI();
   getCalibrationData();
 }
 
@@ -60,30 +118,6 @@ void checkSpectrometer() {
     } else {
       sensor.disableIndicator(); // Turn off the blue status LED to not interfere with readings
       spectrometerCheck = true;
-    }
-  }
-}
-
-// Checks if the app is connected to the IP address
-void checkWIFI() {
-  WiFiClient client = server.available();
-  if(client) {
-    String request = client.readStringUntil('\r'); // GET request
-    client.flush(); // Waits until all of buffer have been sent
-    Serial.println("Connected");
-    Serial.println(request);
-    // Checks if the suffix of the IP address
-    if(request.indexOf(" /1 ") != -1) {
-      spectrometerLightMeasurement = true;
-      Serial.println("Light measurement on");
-    }
-    else if(request.indexOf(" /2 ") !=  -1) {
-      spectrometerLightMeasurement = false;
-      Serial.println("Light measurement off");
-    }
-    else if(request.indexOf(" /data ") !=  -1) {
-      transmitJSON();
-      Serial.println("Transmitting data");
     }
   }
 }
@@ -115,7 +149,7 @@ void getCalibrationData() {
 }
 
 // Transmit JSON file
-void transmitJSON() {  
+/*void transmitJSON() {  
   doc.clear(); // Clear JSON document
   
   // Create JSON value and array
@@ -144,9 +178,10 @@ void transmitJSON() {
   data.add(calibrationData[16]);
   data.add(calibrationData[17]);
 
-  // Transmit data
-  WiFiClient client = server.available();
+  // Transmit data (FUNCTION CURRENTLY NOT WORKING)
+  /*WiFiClient client = server.available();
   if(client) {
+    Serial.println("Transmitting data");
     client.print("<!DOCTYPE HTML>\r\n");
     client.print("<head>\r\n");
     client.print("<link rel='shortcut icon' href='data:image/x-icon;,' type='image/x-icon'> \r\n"); // Shortcut icon to remove favicon.ico issue
@@ -154,5 +189,8 @@ void transmitJSON() {
     client.print("<html>\r\n");
     serializeJson(doc, client);
     client.print("</html>\r\n");
+    client.stop();
+  } else {
+    Serial.println("Could not transmit data");
   }
-}
+}*/
