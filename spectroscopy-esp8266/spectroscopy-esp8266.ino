@@ -65,6 +65,8 @@ void transmitJSON() {
   data.add(calibrationData[15]);
   data.add(calibrationData[16]);
   data.add(calibrationData[17]);
+
+  serializeJson(doc, server);
 }
 
 void setup() {

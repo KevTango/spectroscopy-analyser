@@ -4,13 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".DataActivity">
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/toggle_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Toggle LED"
+        android:text="@string/toggle_led"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toggle_switch" />
 </androidx.constraintlayout.widget.ConstraintLayout>
