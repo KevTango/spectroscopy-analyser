@@ -1,14 +1,9 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
-#include <ArduinoJson.h>
 #include <Wire.h>
 #include "SparkFun_AS7265X.h" 
 AS7265X sensor;
-
-// Setup JSON document
-StaticJsonDocument<500> doc;
-//DynamicJsonDocument doc(500);
 
 //const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
 //const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
@@ -38,35 +33,20 @@ void turnLEDOff() {
 }
 
 void transmitJSON() {
-  doc.clear(); // Clear JSON document
-  
-  // Create JSON value and array
-  doc["type"] = "spectrometer sensor";
-  JsonArray data = doc.createNestedArray("data");
-  
-  // Add data to JSON array
-  data.add(calibrationData[0]);
-  data.add(calibrationData[1]);
-  data.add(calibrationData[2]);
-  data.add(calibrationData[3]);
-  data.add(calibrationData[4]);
-  data.add(calibrationData[5]);
-  
-  data.add(calibrationData[6]);
-  data.add(calibrationData[7]);
-  data.add(calibrationData[8]);
-  data.add(calibrationData[9]);
-  data.add(calibrationData[10]);
-  data.add(calibrationData[11]);
-  
-  data.add(calibrationData[12]);
-  data.add(calibrationData[13]);
-  data.add(calibrationData[14]);
-  data.add(calibrationData[15]);
-  data.add(calibrationData[16]);
-  data.add(calibrationData[17]);
+  // Combines all of the sensor data into a string
+  String sensorData = "";
+  for(int i = 0; i <= 17; i++) {
+    if(i == 17) {
+      sensorData = sensorData + "\"" + String(calibrationData[i]) + "\"";
+    } else {
+      sensorData = sensorData + "\"" + String(calibrationData[i]) + "\",";
+    }
+  }
 
-  serializeJson(doc, server);
+  // Parses the data into a JSON string
+  String jsonData = 
+  "{\"type\":\"spectrometer sensor\",\"data\":[" + sensorData + "]}";
+  server.send(200, "text/plain", jsonData);
 }
 
 void setup() {
@@ -149,50 +129,3 @@ void getCalibrationData() {
   calibrationData[16] = sensor.getCalibratedV();
   calibrationData[17] = sensor.getCalibratedW();
 }
-
-// Transmit JSON file
-/*void transmitJSON() {  
-  doc.clear(); // Clear JSON document
-  
-  // Create JSON value and array
-  doc["type"] = "spectrometer sensor";
-  JsonArray data = doc.createNestedArray("data");
-  
-  // Add data to JSON array
-  data.add(calibrationData[0]);
-  data.add(calibrationData[1]);
-  data.add(calibrationData[2]);
-  data.add(calibrationData[3]);
-  data.add(calibrationData[4]);
-  data.add(calibrationData[5]);
-  
-  data.add(calibrationData[6]);
-  data.add(calibrationData[7]);
-  data.add(calibrationData[8]);
-  data.add(calibrationData[9]);
-  data.add(calibrationData[10]);
-  data.add(calibrationData[11]);
-  
-  data.add(calibrationData[12]);
-  data.add(calibrationData[13]);
-  data.add(calibrationData[14]);
-  data.add(calibrationData[15]);
-  data.add(calibrationData[16]);
-  data.add(calibrationData[17]);
-
-  // Transmit data (FUNCTION CURRENTLY NOT WORKING)
-  /*WiFiClient client = server.available();
-  if(client) {
-    Serial.println("Transmitting data");
-    client.print("<!DOCTYPE HTML>\r\n");
-    client.print("<head>\r\n");
-    client.print("<link rel='shortcut icon' href='data:image/x-icon;,' type='image/x-icon'> \r\n"); // Shortcut icon to remove favicon.ico issue
-    client.print("</head>\r\n");
-    client.print("<html>\r\n");
-    serializeJson(doc, client);
-    client.print("</html>\r\n");
-    client.stop();
-  } else {
-    Serial.println("Could not transmit data");
-  }
-}*/
