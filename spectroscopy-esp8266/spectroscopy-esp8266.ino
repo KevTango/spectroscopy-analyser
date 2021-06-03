@@ -45,7 +45,7 @@ void transmitJSON() {
 
   // Parses the data into a JSON string
   String jsonData = 
-  "{\"type\":\"spectrometer sensor\",\"data\":[" + sensorData + "]}";
+  "{\"type\":\"spectrometer sensor\",\"datastream\":[" + sensorData + "]}";
   server.send(200, "text/plain", jsonData);
 }
 
