@@ -17,11 +17,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Referencing
-        val button_connect = findViewById<Button>(R.id.connect_button)
+        val buttonConnect = findViewById<Button>(R.id.connect_button)
         val ip = findViewById<EditText>(R.id.ip_address) // IP address
 
         // set on-click listener
-        button_connect.setOnClickListener {
+        buttonConnect.setOnClickListener {
             Constant.ipAddress = ip.text.toString() // Converts IP address to string
 
             val checkIP = ConnectToIPAddress()

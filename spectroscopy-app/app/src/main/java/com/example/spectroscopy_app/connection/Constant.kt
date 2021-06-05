@@ -6,5 +6,6 @@ class Constant {
         var ipCheck = 0
         var lightOnCheck = 0
         var lightOffCheck = 0
+        var dataArray = listOf("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0")
     }
 }

@@ -1,5 +1,6 @@
 package com.example.spectroscopy_app
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,33 +13,24 @@ import com.example.spectroscopy_app.connection.Constant
 import com.example.spectroscopy_app.connection.RequestData
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOff
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOn
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Retrofit
 import retrofit2.awaitResponse
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Runnable
+import java.util.*
 
 class DataActivity : AppCompatActivity() {
 
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private val delay = 2000L
     private var TAG = ""
-    private var variabled = 0
 
-
-
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data)
-
-        val mainHandler = Handler(Looper.getMainLooper())
-
-        mainHandler.post(object : Runnable {
-            override fun run() {
-                getCurrentData()
-                mainHandler.postDelayed(this, 1000)
-            }
-        })
 
         val toggle = findViewById<Switch>(R.id.toggle_switch)
 
@@ -63,10 +55,16 @@ class DataActivity : AppCompatActivity() {
                 }
             }
         }
+
+        handler = Handler(Looper.getMainLooper())
+        runnable = Runnable {
+            getCurrentData()
+        }
+        getCurrentData()
     }
 
     private fun getCurrentData() {
-        val testText = findViewById<TextView>(R.id.testText)
+        val testTextd = findViewById<TextView>(R.id.testText)
         val api =  Retrofit.Builder()
             .baseUrl("http://${Constant.ipAddress}")
             .addConverterFactory(GsonConverterFactory.create())
@@ -80,11 +78,11 @@ class DataActivity : AppCompatActivity() {
                 Log.d(TAG, data.datastream.toString())
 
                 withContext(Dispatchers.Main) {
-                    //testText.text = data.datastream.toString()
-                    variabled += 1
-                    testText.text = variabled.toString()
+                    Constant.dataArray = data.datastream
+                    testTextd.text = Constant.dataArray[10]
                 }
             }
         }
+        handler.postDelayed(runnable,delay)
     }
 }
