@@ -6,4 +6,5 @@
     <string name="testText">TextView</string>
     <string name="test">test</string>
     <string name="enter_esp8266_ip_address">Enter ESP8266 IP Address:</string>
+    <string name="spectral_response">Spectral Response</string>
 </resources>

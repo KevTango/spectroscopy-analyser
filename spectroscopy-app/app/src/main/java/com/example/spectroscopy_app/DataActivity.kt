@@ -75,7 +75,7 @@ class DataActivity : AppCompatActivity() {
 
     // Get data from JSON using retrofit and coroutines
     private fun getCurrentData() {
-        val api =  Retrofit.Builder()
+        val api = Retrofit.Builder()
             .baseUrl("http://${Constant.ipAddress}")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -84,7 +84,7 @@ class DataActivity : AppCompatActivity() {
         // Run coroutine on i/o outside of main thread
         GlobalScope.launch(Dispatchers.IO) {
             val response = api.getSensorData().awaitResponse()
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 val data = response.body()!!
                 Log.d(tag, data.datastream.toString()) // Sending log output
 
@@ -95,15 +95,13 @@ class DataActivity : AppCompatActivity() {
                 }
             }
         }
-        handler.postDelayed(runnable,delay) // Handler to run code repeatedly
+        handler.postDelayed(runnable, delay) // Handler to run code repeatedly
     }
 
     // Plot graph on screen
     private fun plotGraph() {
         val lineChart = findViewById<LineChart>(R.id.lineChartView)
-
-        // Adding data points
-        val sensorData: MutableList<Entry> = ArrayList()
+        val sensorData: MutableList<Entry> = ArrayList() // Adding data points
 
         sensorData.add(Entry(410f, Constant.dataArray[0].toFloat()))
         sensorData.add(Entry(435f, Constant.dataArray[1].toFloat()))
@@ -126,6 +124,11 @@ class DataActivity : AppCompatActivity() {
 
         val dataSet = LineDataSet(sensorData, "Spectroscopy Sensor Data")
         val data = LineData(dataSet)
+
+        // Create MarkerView
+        val markerView = DataMarkerView(applicationContext, R.layout.marker_view)
+        lineChart.markerView = markerView
+        lineChart.setTouchEnabled(true)
 
         // Adjusting the line chart options
         lineChart.legend.isEnabled = false // Remove legend
