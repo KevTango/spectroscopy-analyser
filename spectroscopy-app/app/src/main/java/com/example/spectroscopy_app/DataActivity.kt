@@ -13,6 +13,7 @@ import com.example.spectroscopy_app.connection.RequestData
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOff
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOn
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -23,12 +24,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Runnable
 import java.util.*
 
+
 class DataActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
-    private val delay = 2000L
-    private var TAG = ""
+    private val delay =
+        2000L // Delay timer of 2s (high due to app crashes and time needed to parse JSON)
+    private val dataSetLineWidth = 2f // Adjusts the line width of graph
+    private val textSize = 12f // Adjusts the text size of graph
+    private var tag = ""
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +42,7 @@ class DataActivity : AppCompatActivity() {
 
         val toggle = findViewById<Switch>(R.id.toggle_switch)
 
+        // Checks if the toggled LED switch has be changed
         toggle.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val lightOn = TurnLightMeasurementOn()
@@ -59,6 +65,7 @@ class DataActivity : AppCompatActivity() {
             }
         }
 
+        // Initialise handler to repeat code
         handler = Handler(Looper.getMainLooper())
         runnable = Runnable {
             getCurrentData()
@@ -66,6 +73,7 @@ class DataActivity : AppCompatActivity() {
         getCurrentData()
     }
 
+    // Get data from JSON using retrofit and coroutines
     private fun getCurrentData() {
         val api =  Retrofit.Builder()
             .baseUrl("http://${Constant.ipAddress}")
@@ -73,25 +81,29 @@ class DataActivity : AppCompatActivity() {
             .build()
             .create(RequestData::class.java)
 
+        // Run coroutine on i/o outside of main thread
         GlobalScope.launch(Dispatchers.IO) {
             val response = api.getSensorData().awaitResponse()
             if(response.isSuccessful) {
                 val data = response.body()!!
-                Log.d(TAG, data.datastream.toString())
+                Log.d(tag, data.datastream.toString()) // Sending log output
 
+                // Run coroutine on main thread
                 withContext(Dispatchers.Main) {
                     Constant.dataArray = data.datastream
                     plotGraph()
                 }
             }
         }
-        handler.postDelayed(runnable,delay)
+        handler.postDelayed(runnable,delay) // Handler to run code repeatedly
     }
 
+    // Plot graph on screen
     private fun plotGraph() {
-        val line_chart = findViewById<LineChart>(R.id.lineChartView)
+        val lineChart = findViewById<LineChart>(R.id.lineChartView)
 
-        var sensorData: MutableList<Entry> = ArrayList()
+        // Adding data points
+        val sensorData: MutableList<Entry> = ArrayList()
 
         sensorData.add(Entry(410f, Constant.dataArray[0].toFloat()))
         sensorData.add(Entry(435f, Constant.dataArray[1].toFloat()))
@@ -113,10 +125,19 @@ class DataActivity : AppCompatActivity() {
         sensorData.add(Entry(940f, Constant.dataArray[17].toFloat()))
 
         val dataSet = LineDataSet(sensorData, "Spectroscopy Sensor Data")
-
         val data = LineData(dataSet)
-        line_chart.data = data
-        line_chart.invalidate()
 
+        // Adjusting the line chart options
+        lineChart.legend.isEnabled = false // Remove legend
+        lineChart.description.text = "Frequency (nm)" // Adds 'x-axis description'
+        lineChart.xAxis.position = XAxis.XAxisPosition.BOTTOM // Set x-axis label to the bottom
+        lineChart.axisRight.isEnabled = false // Removes right y-axis label
+        dataSet.color = R.color.black // Sets line to be black
+        dataSet.lineWidth = dataSetLineWidth // Adjusts line width
+        dataSet.valueTextSize = textSize // Adjusts text size
+
+        // Show graph
+        lineChart.data = data
+        lineChart.invalidate()
     }
 }

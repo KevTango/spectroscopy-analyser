@@ -1,6 +1,7 @@
 package com.example.spectroscopy_app.connection
 
 class Constant {
+    // Global variables
     companion object {
         var ipAddress = "IP Address"
         var ipCheck = 0

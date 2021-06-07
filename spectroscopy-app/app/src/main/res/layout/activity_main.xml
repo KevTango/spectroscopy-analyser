@@ -10,15 +10,16 @@
         android:id="@+id/ip_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="15"
-        android:hint="Enter ESP8266 IP Address:"
-        android:inputType="number"
         android:digits="0123456789."
+        android:ems="15"
+        android:hint="@string/enter_esp8266_ip_address"
+        android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/connect_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/connect_button"

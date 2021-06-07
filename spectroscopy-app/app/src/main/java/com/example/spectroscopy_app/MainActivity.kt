@@ -20,21 +20,32 @@ class MainActivity : AppCompatActivity() {
         val buttonConnect = findViewById<Button>(R.id.connect_button)
         val ip = findViewById<EditText>(R.id.ip_address) // IP address
 
-        // set on-click listener
+        // Set on-click listener
         buttonConnect.setOnClickListener {
+            val checkIP = ConnectToIPAddress()
+
             Constant.ipAddress = ip.text.toString() // Converts IP address to string
 
-            val checkIP = ConnectToIPAddress()
-            if (checkIP.connectToIPAddress() == 1) {
-                // Goes to next screen
-                val intent = Intent(this, DataActivity::class.java)
-                startActivity(intent)
-            } else {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Cannot connect to ${Constant.ipAddress}, please check IP address",
-                    Toast.LENGTH_SHORT
-                ).show() // Error toast
+            when {
+                Constant.ipAddress == "" -> {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Empty string detected, please re-enter IP address",
+                        Toast.LENGTH_SHORT
+                    ).show() // Error toast for empty string
+                }
+                checkIP.connectToIPAddress() == 1 -> {
+                    // Goes to next screen
+                    val intent = Intent(this, DataActivity::class.java)
+                    startActivity(intent)
+                }
+                else -> {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Cannot connect to ${Constant.ipAddress}, please check IP address",
+                        Toast.LENGTH_SHORT
+                    ).show() // Error toast
+                }
             }
         }
     }
