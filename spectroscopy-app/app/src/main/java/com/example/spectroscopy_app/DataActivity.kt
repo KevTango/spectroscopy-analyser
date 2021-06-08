@@ -24,13 +24,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Runnable
 import java.util.*
 
-
+// TODO: Make separate classes for the functions
+@Suppress("DEPRECATION")
 class DataActivity : AppCompatActivity() {
 
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
     private val delay =
-        2000L // Delay timer of 2s (high due to app crashes and time needed to parse JSON)
+        1000L // Delay timer of 1s (due to time needed to parse JSON which can crash app)
     private val dataSetLineWidth = 2f // Adjusts the line width of graph
     private val textSize = 12f // Adjusts the text size of graph
     private var tag = ""
@@ -82,7 +83,8 @@ class DataActivity : AppCompatActivity() {
             .create(RequestData::class.java)
 
         // Run coroutine on i/o outside of main thread
-        GlobalScope.launch(Dispatchers.IO) {
+        // TODO: Improve coroutine by making it non-blocking to instantly toggle LED
+        GlobalScope.launch(Dispatchers.Default) {
             val response = api.getSensorData().awaitResponse()
             if (response.isSuccessful) {
                 val data = response.body()!!
@@ -92,10 +94,10 @@ class DataActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     Constant.dataArray = data.datastream
                     plotGraph()
+                    handler.postDelayed(runnable, delay) // Handler to run code repeatedly
                 }
             }
         }
-        handler.postDelayed(runnable, delay) // Handler to run code repeatedly
     }
 
     // Plot graph on screen
