@@ -12,6 +12,7 @@ import com.example.spectroscopy_app.connection.Constant
 import com.example.spectroscopy_app.connection.RequestData
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOff
 import com.example.spectroscopy_app.connection.TurnLightMeasurementOn
+import com.example.spectroscopy_app.graph.DataMarkerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry

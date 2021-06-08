@@ -1,12 +1,15 @@
-package com.example.spectroscopy_app
+package com.example.spectroscopy_app.graph
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.widget.TextView
+import com.example.spectroscopy_app.R
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 
+@SuppressLint("ViewConstructor")
 class DataMarkerView(context: Context?, layoutResource: Int) :
     MarkerView(context, layoutResource) {
 
@@ -19,8 +22,8 @@ class DataMarkerView(context: Context?, layoutResource: Int) :
         posy += getYOffset()
 
         // 'Fixing' the MarkerView on screen
-        if (posx < 50) posx = 50f
-        if (posx > 700) posx = 700f
+        if (posx < 75) posx = 75f
+        if (posx > 725) posx = 725f
 
         // Translate to the correct position and draw
         canvas.translate(posx, posy)
@@ -30,9 +33,10 @@ class DataMarkerView(context: Context?, layoutResource: Int) :
 
     // Callbacks everytime the MarkerView is redrawn, can be used to update the
     // content (user-interface)
+    @SuppressLint("SetTextI18n")
     override fun refreshContent(e: Entry, highlight: Highlight) {
-        var count: TextView = findViewById(R.id.tvCount)
-        var frequency: TextView = findViewById(R.id.tvFrequency)
+        val count: TextView = findViewById(R.id.tvCount)
+        val frequency: TextView = findViewById(R.id.tvFrequency)
 
         count.text = "Count: " + e.y
         frequency.text = "Frequency: " + e.x + "nm"
