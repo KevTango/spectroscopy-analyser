@@ -1,0 +1,3 @@
+Change Component Designator: OldDesignator=J1 NewDesignator=USB
+Change Pin Designator/Name:  Old Designator=U1-1 Old Name=IO1 New Designator =IO2 New Name=2
+Change Pin Designator/Name:  Old Designator=U1-2 Old Name=IO2 New Designator =IO1 New Name=1
