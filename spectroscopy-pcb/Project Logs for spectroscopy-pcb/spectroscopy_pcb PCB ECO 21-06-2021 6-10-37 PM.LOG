@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=3.3V Pin=LED2-1
+Removed Pin From Net: NetName=WIFI_LED Pin=R18-2
+Added Pin To Net: NetName=GND Pin=R18-2
+Added Room: Name=schematic
