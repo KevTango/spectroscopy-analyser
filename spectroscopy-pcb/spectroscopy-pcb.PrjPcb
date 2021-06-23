@@ -71,6 +71,27 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=KVVIOWLT
 
+[Document3]
+DocumentPath=spectroscopy_pcb_v2.PcbDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=TJRWFFKM
+
+[GeneratedDocument1]
+DocumentPath=Project Outputs for spectroscopy-pcb\Design Rule Check - spectroscopy_pcb.html
+DItemRevisionGUID=
+
 [Configuration1]
 Name=Sources
 ParameterCount=0
