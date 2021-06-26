@@ -1,0 +1,18 @@
+Added Component: Designator=U5(MSOP10)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "WCH"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "CH340E"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Package Analog Devices"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/CH340E/WCH/view-part/3625184/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=D_P Pin=U5-1
+Added Pin To Net: NetName=D_N Pin=U5-2
+Added Pin To Net: NetName=GND Pin=U5-3
+Added Pin To Net: NetName=OUT Pin=U5-7
+Added Pin To Net: NetName=NetR12_1 Pin=U5-8
+Added Pin To Net: NetName=NetR11_1 Pin=U5-9
+Added Pin To Net: NetName=NetC22_1 Pin=U5-10
+Added Member To Class: ClassName=schematic Member=Component U5 CH340E
+Added Room: Name=schematic

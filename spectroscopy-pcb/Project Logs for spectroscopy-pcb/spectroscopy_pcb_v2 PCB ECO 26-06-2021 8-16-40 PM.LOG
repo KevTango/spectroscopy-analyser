@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=TX Pin=R11-2
+Removed Pin From Net: NetName=RX Pin=R12-2
+Removed Pin From Net: NetName=NetR11_1 Pin=U5-8
+Removed Pin From Net: NetName=NetR12_1 Pin=U5-9
+Added Pin To Net: NetName=RX Pin=R11-2
+Added Pin To Net: NetName=TX Pin=R12-2
+Added Pin To Net: NetName=NetR12_1 Pin=U5-8
+Added Pin To Net: NetName=NetR11_1 Pin=U5-9
+Added Room: Name=schematic

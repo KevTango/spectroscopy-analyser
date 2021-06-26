@@ -1,0 +1,11 @@
+Removed Pin From Net: NetName=NetR11_1 Pin=R11-1
+Removed Pin From Net: NetName=RX Pin=R11-2
+Removed Pin From Net: NetName=NetR12_1 Pin=R12-1
+Removed Pin From Net: NetName=TX Pin=R12-2
+Change Component Designator: OldDesignator=R11 NewDesignator=R12
+Change Component Designator: OldDesignator=R12 NewDesignator=R11
+Added Pin To Net: NetName=NetR11_1 Pin=R11-1
+Added Pin To Net: NetName=RX Pin=R11-2
+Added Pin To Net: NetName=NetR12_1 Pin=R12-1
+Added Pin To Net: NetName=TX Pin=R12-2
+Added Room: Name=schematic

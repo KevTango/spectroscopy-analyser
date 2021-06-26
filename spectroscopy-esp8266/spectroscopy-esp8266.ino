@@ -7,8 +7,10 @@ AS7265X sensor;
 
 //const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
 //const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
-const char *ssid = "TP-Link_E66C"; // The name of the Wi-Fi network that will be created
-const char *password = "Anhsao123"; // The password required to connect to it, leave blank for an open network
+//const char *ssid = "TP-Link_E66C"; // The name of the Wi-Fi network that will be created
+//const char *password = "Anhsao123"; // The password required to connect to it, leave blank for an open network
+const char *ssid = "AndroidAP"; // The name of the Wi-Fi network that will be created
+const char *password = "csfy1894"; // The password required to connect to it, leave blank for an open network
 ESP8266WebServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
@@ -56,7 +58,9 @@ void setup() {
   WiFi.begin(ssid, password);
   // Makes sure the ESP8266 is connected to WIFI
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
-    Serial.println(WiFi.status()); // Prints WL error number 
+    Serial.print("Error: ");
+    Serial.println(WiFi.status()); // Prints WL error number
+    delay(1000); 
     /*
      * WL codes
      * WL_NO_SHIELD        = 255   // For compatibility with WiFi Shield library
