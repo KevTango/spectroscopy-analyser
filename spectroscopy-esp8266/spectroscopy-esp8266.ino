@@ -5,8 +5,8 @@
 #include "SparkFun_AS7265X.h" 
 AS7265X sensor;
 
-//const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
-//const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
+const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
+const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
 ESP8266WebServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
