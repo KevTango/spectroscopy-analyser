@@ -9,8 +9,8 @@ of a material
 
 ## Schematic
 
-![Schematic](https://github.com/KevTango/spectroscopy-analyser/spectroscopy-pcb/schematic.pdf)
+![Schematic](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/schematic.pdf)
 
 ## PCB
 
-![PCB](https://github.com/KevTango/spectroscopy-analyser/spectroscopy-pcb/pcb_front.png)
+![PCB](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/pcb_front.PNG)
