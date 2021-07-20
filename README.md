@@ -9,7 +9,7 @@ of a material
 
 ## Schematic
 
-![Schematic](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/schematic.pdf)
+![Schematic](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/schematic.png)
 
 ## PCB
 
