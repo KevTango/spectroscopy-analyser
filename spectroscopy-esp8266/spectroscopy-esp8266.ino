@@ -5,13 +5,15 @@
 #include "SparkFun_AS7265X.h" 
 AS7265X sensor;
 
-const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
-const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
+//const char *ssid = "Spectrometer WIFI Access Point"; // The name of the Wi-Fi network that will be created
+//const char *password = "thecakeisalie";   // The password required to connect to it, leave blank for an open network
 ESP8266WebServer server(80);
 
 float calibrationData[18]; // Creates an array filled with calibration data
 boolean spectrometerLightMeasurement = false; // Setting a toggle for spectroscopy light measurements
 boolean spectrometerCheck = false; // Spectrometer flag to only run once to stop status LED flashing
+
+const int WIFI_LED_PIN = D7; // LED to signify that the WIFI is connected
 
 void handleRoot() {
   server.send(200, "text/plain", "Connected");
@@ -54,6 +56,7 @@ void setup() {
   WiFi.begin(ssid, password);
   // Makes sure the ESP8266 is connected to WIFI
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    digitalWrite(WIFI_LED_PIN, LOW); // Turn WIFI LED off
     Serial.print("Error: ");
     Serial.println(WiFi.status()); // Prints WL error number
     delay(1000); 
@@ -73,6 +76,7 @@ void setup() {
   Serial.println("WIFI connected");
   Serial.print("IP Address: "); 
   Serial.println(WiFi.localIP()); // Prints IP address
+  digitalWrite(WIFI_LED_PIN, LOW); // Turn WIFI LED on
 
   if (MDNS.begin("esp8266")) {
     Serial.println("MDNS responder started");
