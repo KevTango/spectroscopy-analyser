@@ -17,6 +17,6 @@ It utilises wireless Qi charging and a USB-C port.
 
 ![Schematic](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/schematic.png)
 
-## PCB
+## PCB (50x30mm)
 
 ![PCB](https://github.com/KevTango/spectroscopy-analyser/blob/main/spectroscopy-pcb/pcb_front.PNG)
